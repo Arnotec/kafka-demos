@@ -30,12 +30,16 @@ public class Main {
         ProducerDemo producerDemo = new ProducerDemo();
         producerDemo.setProducer(producer);
 
-        for (int j = 0; j < 10; j++) {
+        for (int j = 0; j < 2; j++) {
 
-            for (int i = 0; i < 30; i++) {
+            for (int i = 0; i < 10; i++) {
+
+                String topic = "demo_java";
+                String key = "id_" + i;
+                String value = "Bonjour " + i;
 
                 // create a Producer record
-                ProducerRecord<String, String> producerRecord = new ProducerRecord<>("demo_java", "msg with callbacks " + i);
+                ProducerRecord<String, String> producerRecord = new ProducerRecord<>(topic, key, value);
 
                 // send data
                 producerDemo.getProducer().send(producerRecord,
@@ -43,21 +47,21 @@ public class Main {
                             // executes every time a record successfully sent or an exception is thrown
                             if (e == null) {
                                 // the record was successfully sent
-                                log.info(MessageFormat.format("Received new metadata \nTopic: {0}\nPartition: {1}\nOffset: {2}\nTimestamp: {3}\n",
-                                        recordMetadata.topic(), recordMetadata.partition(), recordMetadata.offset(), recordMetadata.timestamp()));
+                                log.info(MessageFormat.format("Topic: {0} | Key: {1} | Partition: {2}",
+                                        recordMetadata.topic(), key, recordMetadata.partition()));
                             }
                             else {
                                 log.error("Error while producing", e);
                             }
-                        }
-                );
-
+                        });
             }
+
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+
         }
 
 
