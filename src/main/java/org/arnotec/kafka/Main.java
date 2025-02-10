@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.MessageFormat;
+import java.time.Instant;
 import java.util.Properties;
 
 public class Main {
@@ -47,8 +48,9 @@ public class Main {
                             // executes every time a record successfully sent or an exception is thrown
                             if (e == null) {
                                 // the record was successfully sent
-                                log.info(MessageFormat.format("Topic: {0} | Key: {1} | Partition: {2}",
-                                        recordMetadata.topic(), key, recordMetadata.partition()));
+                                log.info(MessageFormat.format("Topic: {0} | Key: {1} | Partition: {2} | Timestamp: {3}",
+                                        recordMetadata.topic(), producerRecord.key(), recordMetadata.partition(),
+                                        Instant.ofEpochMilli(recordMetadata.timestamp())));
                             }
                             else {
                                 log.error("Error while producing", e);
