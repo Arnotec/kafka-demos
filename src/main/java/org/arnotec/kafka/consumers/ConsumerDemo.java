@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import java.text.MessageFormat;
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
