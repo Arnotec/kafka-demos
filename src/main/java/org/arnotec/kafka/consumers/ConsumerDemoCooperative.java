@@ -2,6 +2,7 @@ package org.arnotec.kafka.consumers;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.CooperativeStickyAssignor;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.errors.WakeupException;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -13,9 +14,9 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Properties;
 
-public class ConsumerDemoWithShutDown {
+public class ConsumerDemoCooperative {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(ConsumerDemoWithShutDown.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(ConsumerDemoCooperative.class);
 
     public static void main(String[] args) {
         LOGGER.info("Hey! I am a Kafka consumer");
@@ -36,6 +37,9 @@ public class ConsumerDemoWithShutDown {
         // earliest => read from the beginning of the topic
         // latest => read data from now
         properties.setProperty("auto.offset.reset", "earliest");
+        // define the rebalance strategy
+        properties.setProperty("partition.assignment.strategy", CooperativeStickyAssignor.class.getName());
+        // properties.setProperty("group.instance.id", "....."); -> strategy for static assignment
 
         // create a consumer
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(properties);
